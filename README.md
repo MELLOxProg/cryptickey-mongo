@@ -16,11 +16,23 @@
 
 ## 📚 Documentation
 
-For full documentation, visit our **[Mintlify documentation site](https://cryptickey.mintlify.app/)**.
+Complete documentation is available in the `/docs` folder. Key documentation includes:
 
-- [Introduction](/introduction)
-- [Quickstart Guide](/quickstart)
-- [API Reference](/api-reference)
+- [Introduction](docs/introduction.mdx) - Overview of CrypticKey and its features
+- [Quickstart Guide](docs/quickstart.mdx) - Get up and running in 5 minutes
+- [Installation Guide](docs/installation.mdx) - Detailed setup instructions
+- [API Reference](docs/api-reference/introduction.mdx) - Complete API documentation
+- [User Guides](docs/guides/overview.mdx) - How to use CrypticKey
+- [Deployment Guides](docs/deployment/vercel.mdx) - Deploy to production
+
+### 🚀 Deploy Documentation with Mintlify
+
+To create a beautiful documentation site:
+
+1. Sign up at [mintlify.com](https://mintlify.com)
+2. Connect this GitHub repository
+3. Set the docs directory to `/docs`
+4. Deploy your documentation site!
 
 ## 🚀 Getting Started
 
@@ -72,7 +84,7 @@ For full documentation, visit our **[Mintlify documentation site](https://crypti
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please see the [Contributing Guide](/development/contributing) for more details.
+Contributions are welcome! Please see the [Contributing Guide](docs/development/contributing.mdx) for more details.
 
 ## 📄 License
 
