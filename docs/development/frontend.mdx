@@ -1,0 +1,267 @@
+---
+title: Frontend Development
+description: Guide for developing and modifying the CrypticKey frontend application.
+---
+
+## Frontend Development
+
+The CrypticKey frontend is built with modern React and provides a clean, intuitive interface for password management.
+
+### Technology Stack
+
+- **React 18.3.1** - Component-based UI library
+- **Vite 5.4.1** - Fast build tool and development server
+- **Tailwind CSS 3.4.10** - Utility-first CSS framework
+- **React Toastify 10.0.5** - Toast notifications
+- **UUID 10.0.0** - Unique ID generation
+- **LordIcon** - Animated icons
+
+### Project Structure
+
+```
+src/
+├── components/
+│   ├── Navbar.jsx      # Navigation bar component
+│   ├── Manager.jsx     # Main password management component
+│   └── Footer.jsx      # Footer component
+├── assets/
+│   └── react.svg       # React logo
+├── App.jsx             # Root application component
+├── App.css             # Application styles
+├── main.jsx            # Application entry point
+└── index.css           # Global styles and Tailwind imports
+```
+
+### Key Components
+
+#### App.jsx
+The root component that orchestrates the entire application:
+
+```jsx
+function App() {
+  return (
+    <>
+      <Navbar />
+      <div className='[background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]'>
+        <Manager />
+      </div>
+      <Footer />
+    </>
+  )
+}
+```
+
+#### Manager.jsx
+The core component handling all password operations:
+
+- **State Management**: Uses React hooks for form data and password array
+- **API Integration**: Handles all CRUD operations via fetch API
+- **User Interactions**: Form submission, editing, deleting, copying
+- **Visual Feedback**: Loading states, toast notifications
+
+Key state variables:
+```jsx
+const [form, setform] = useState({ site: '', username: '', password: '' });
+const [passwordArray, setpasswordArray] = useState([]);
+const [isSaving, setIsSaving] = useState(false);
+```
+
+### Development Setup
+
+#### Prerequisites
+- Node.js 16+ installed
+- Basic knowledge of React and JavaScript
+
+#### Getting Started
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Start development server:**
+   ```bash
+   npm run dev
+   ```
+
+3. **Access the application:**
+   - Frontend: `http://localhost:5173`
+   - Hot module replacement enabled for instant updates
+
+### Styling and Design
+
+#### Tailwind CSS
+The application uses Tailwind CSS for all styling:
+
+- **Color Scheme**: Blue gradient theme (`#2e2eb8` to `#6666df`)
+- **Responsive Design**: Mobile-first approach with responsive utilities
+- **Component Styling**: Utility classes for consistent design
+
+#### Custom Styles
+Additional styles are defined in `src/App.css` and include:
+- Custom font imports (Handjet from Google Fonts)
+- Loading animation keyframes
+- Component-specific styling
+
+### API Integration
+
+The frontend communicates with the backend through REST API calls:
+
+#### Get Passwords
+```javascript
+const getPasswords = async () => {
+  try {
+    let req = await fetch("/api/passwords");
+    let passwords = await req.json();
+    setpasswordArray(passwords);
+  } catch (error) {
+    console.error('Error loading passwords:', error);
+  }
+}
+```
+
+#### Save Password
+```javascript
+const savePassword = async() => {
+  const newPassword = { ...form, id: uuidv4() };
+  const response = await fetch("/api/passwords", {
+    method: "POST", 
+    headers: {"Content-Type":"application/json" }, 
+    body: JSON.stringify(newPassword)
+  });
+}
+```
+
+### User Experience Features
+
+#### Form Validation
+- All fields must be longer than 3 characters
+- Real-time validation feedback
+- Error notifications via toast messages
+
+#### Password Visibility Toggle
+```javascript
+const showPassword = () => {
+  if (ref.current.src.includes("icons/eyecross.png")) {
+    ref.current.src = "icons/eye.png";
+    passwordRef.current.type = "password"
+  } else {
+    ref.current.src = "icons/eyecross.png";
+    passwordRef.current.type = "text"
+  }
+}
+```
+
+#### Copy to Clipboard
+```javascript
+const copyText = (text) => {
+  toast('Copied to clipboard!');
+  navigator.clipboard.writeText(text)
+}
+```
+
+### Development Guidelines
+
+#### Code Style
+- Use functional components with hooks
+- Follow React best practices
+- Consistent naming conventions (camelCase)
+- Meaningful component and variable names
+
+#### State Management
+- Use `useState` for component-level state
+- `useEffect` for side effects and lifecycle management
+- Avoid prop drilling when possible
+
+#### Error Handling
+- Wrap API calls in try-catch blocks
+- Provide user-friendly error messages
+- Use toast notifications for feedback
+
+### Common Development Tasks
+
+#### Adding New Features
+
+1. **Create new component:**
+   ```jsx
+   // src/components/NewFeature.jsx
+   import React from 'react';
+   
+   const NewFeature = () => {
+     return (
+       <div className="new-feature">
+         {/* Component content */}
+       </div>
+     );
+   };
+   
+   export default NewFeature;
+   ```
+
+2. **Import and use in App.jsx:**
+   ```jsx
+   import NewFeature from './components/NewFeature';
+   ```
+
+#### Modifying Styles
+
+1. **Update Tailwind classes:**
+   ```jsx
+   <div className="bg-blue-700 hover:bg-blue-500 rounded-full px-8 py-2">
+   ```
+
+2. **Add custom CSS if needed:**
+   ```css
+   /* src/App.css */
+   .custom-style {
+     /* Custom properties */
+   }
+   ```
+
+#### API Integration
+
+1. **Create new API function:**
+   ```javascript
+   const newApiCall = async (data) => {
+     try {
+       const response = await fetch('/api/new-endpoint', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify(data)
+       });
+       return await response.json();
+     } catch (error) {
+       console.error('API Error:', error);
+     }
+   };
+   ```
+
+### Testing
+
+#### Manual Testing
+- Test all user interactions (form submission, editing, deleting)
+- Verify responsive design on different screen sizes
+- Check error handling scenarios
+
+#### Browser Developer Tools
+- Use React DevTools for component inspection
+- Monitor network requests in Network tab
+- Check console for errors and warnings
+
+### Building for Production
+
+```bash
+# Build the application
+npm run build
+
+# Preview the build
+npm run preview
+```
+
+The build output will be in the `dist/` directory, ready for deployment.
+
+### Next Steps
+
+- [Backend Development Guide](/development/backend)
+- [Contributing Guide](/development/contributing)
+- [API Reference](/api-reference/introduction)

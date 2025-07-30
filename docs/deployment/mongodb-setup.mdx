@@ -1,0 +1,200 @@
+---
+title: MongoDB Setup
+description: How to set up MongoDB for CrypticKey in both local and cloud environments.
+---
+
+## MongoDB Setup
+
+CrypticKey requires a MongoDB database to store your password data. This guide covers both local and cloud setup options.
+
+### Local MongoDB Setup
+
+#### Installing MongoDB
+
+**Windows:**
+1. Download MongoDB Community Server from [mongodb.com](https://www.mongodb.com/try/download/community)
+2. Run the installer and follow the setup wizard
+3. Choose "Complete" installation
+4. Install MongoDB as a service (recommended)
+
+**macOS:**
+```bash
+# Using Homebrew
+brew tap mongodb/brew
+brew install mongodb-community
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+# Import the public key
+wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+
+# Create list file
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+
+# Update package database
+sudo apt-get update
+
+# Install MongoDB
+sudo apt-get install -y mongodb-org
+```
+
+#### Starting MongoDB
+
+**Windows:**
+- MongoDB should start automatically as a service
+- Manual start: `net start MongoDB`
+
+**macOS:**
+```bash
+brew services start mongodb/brew/mongodb-community
+```
+
+**Linux:**
+```bash
+sudo systemctl start mongod
+sudo systemctl enable mongod  # Start on boot
+```
+
+#### Verify Installation
+
+```bash
+# Connect to MongoDB shell
+mongosh
+
+# Or with older versions
+mongo
+```
+
+### Cloud MongoDB Setup (MongoDB Atlas)
+
+MongoDB Atlas is a fully managed cloud database service that's perfect for production deployments.
+
+#### Creating an Atlas Account
+
+1. Go to [mongodb.com/atlas](https://www.mongodb.com/atlas)
+2. Click "Try Free" and create an account
+3. Verify your email address
+
+#### Creating a Cluster
+
+1. **Choose a Plan:** Select the free tier (M0) for testing
+2. **Select Cloud Provider:** Choose AWS, Google Cloud, or Azure
+3. **Choose Region:** Select a region close to your users
+4. **Cluster Name:** Give your cluster a name (e.g., "cryptickey-cluster")
+5. **Create Cluster:** Click "Create Cluster"
+
+#### Database Setup
+
+1. **Create Database:** Click "Browse Collections" → "Add My Own Data"
+2. **Database Name:** `crypticKey`
+3. **Collection Name:** `passwords`
+4. **Create:** Click "Create"
+
+#### Network Access
+
+1. Go to "Network Access" in the left sidebar
+2. Click "Add IP Address"
+3. For development: Add your current IP
+4. For production: Add `0.0.0.0/0` (allows access from anywhere - use with caution)
+5. Click "Confirm"
+
+#### Database User
+
+1. Go to "Database Access" in the left sidebar
+2. Click "Add New Database User"
+3. Choose "Password" authentication
+4. Username: `cryptickey-user` (or your preference)
+5. Password: Generate a secure password
+6. Database User Privileges: Select "Atlas admin" or "Read and write to any database"
+7. Click "Add User"
+
+#### Connection String
+
+1. Go to "Clusters" and click "Connect" on your cluster
+2. Choose "Connect your application"
+3. Driver: Node.js, Version: 4.1 or later
+4. Copy the connection string - it will look like:
+   ```
+   mongodb+srv://cryptickey-user:<password>@cluster0.abc123.mongodb.net/?retryWrites=true&w=majority
+   ```
+5. Replace `<password>` with your actual password
+
+### Environment Configuration
+
+#### Local Development
+
+Create a `.env` file in your `backend` directory:
+
+```env
+MONGODB_URI=mongodb://localhost:27017
+PORT=3000
+```
+
+#### Production (Atlas)
+
+For production deployments, use your Atlas connection string:
+
+```env
+MONGODB_URI=mongodb+srv://cryptickey-user:your-password@cluster0.abc123.mongodb.net/crypticKey?retryWrites=true&w=majority
+PORT=3000
+```
+
+### Database Schema
+
+CrypticKey uses a simple schema for password storage:
+
+```javascript
+{
+  _id: ObjectId("..."),        // MongoDB auto-generated ID
+  id: "uuid-string",           // Client-generated unique ID
+  site: "https://example.com", // Website URL
+  username: "user@email.com",  // Username or email
+  password: "secretpassword"   // Password (stored as plain text)
+}
+```
+
+### Security Considerations
+
+#### For Local Development
+- MongoDB runs without authentication by default
+- Only accessible from localhost
+- Suitable for development only
+
+#### For Production
+- Always use MongoDB Atlas or properly secured self-hosted instances
+- Enable authentication and authorization
+- Use connection strings with credentials
+- Restrict network access to known IP addresses
+- Enable SSL/TLS encryption
+
+### Troubleshooting
+
+#### Connection Errors
+
+**"Connection refused":**
+- Verify MongoDB is running
+- Check the port (default is 27017)
+- Verify firewall settings
+
+**"Authentication failed":**
+- Check username and password in connection string
+- Verify user has correct permissions
+- Ensure database name matches
+
+**"Network timeout":**
+- Check network connectivity
+- Verify IP whitelist in Atlas
+- Check firewall rules
+
+#### Performance Tips
+
+- Create indexes on frequently queried fields
+- Monitor connection pool usage
+- Use connection pooling in production
+- Consider read replicas for high-traffic applications
+
+### Next Steps
+
+- [Environment Variables Configuration](/deployment/environment-variables)
+- [Vercel Deployment Guide](/deployment/vercel)

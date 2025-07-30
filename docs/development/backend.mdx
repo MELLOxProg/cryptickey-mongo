@@ -1,0 +1,186 @@
+---
+title: Backend Development
+description: A guide to developing and extending the CrypticKey backend API.
+---
+
+## Backend Development
+
+The CrypticKey backend is a lightweight Node.js and Express server that provides a RESTful API for password management.
+
+### Technology Stack
+
+- **Node.js 16+** - JavaScript runtime
+- **Express 4.18.2** - Web application framework
+- **MongoDB Node.js Driver** - Official MongoDB driver
+- **dotenv** - Environment variable management
+- **CORS** - Cross-Origin Resource Sharing middleware
+- **Body Parser** - Request body parsing middleware
+
+### Project Structure
+
+```
+backend/
+├── node_modules/
+├── .env              # Environment variables file
+├── server.js         # Main server entry point
+├── package.json      # Dependencies and scripts
+└── package-lock.json
+```
+
+### Server Entry Point (server.js)
+
+The `server.js` file sets up the Express server, connects to MongoDB, and defines the API routes.
+
+#### Key Sections
+
+1.  **Imports and Setup:**
+    ```javascript
+    const express = require('express');
+    const dotenv = require('dotenv');
+    const { MongoClient } = require('mongodb');
+    const bodyParser = require('body-parser');
+    const cors = require('cors');
+
+    dotenv.config();
+    const app = express();
+    app.use(bodyParser.json());
+    app.use(cors());
+    ```
+
+2.  **Database Connection:**
+    ```javascript
+    const url = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+    const client = new MongoClient(url);
+    const dbName = 'crypticKey';
+    client.connect();
+    ```
+
+3.  **API Routes:**
+    -   `GET /`: Get all passwords
+    -   `POST /`: Save a new password
+    -   `DELETE /`: Delete a password
+
+4.  **Server Start:**
+    ```javascript
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log(`Server app listening on port http://localhost:${port}`);
+    });
+    ```
+
+### API Endpoints
+
+#### GET /api/passwords
+-   Retrieves all documents from the `passwords` collection.
+
+    ```javascript
+    app.get('/', async (req, res) => {
+      const db = client.db(dbName);
+      const collection = db.collection('passwords');
+      const findResult = await collection.find({}).toArray();
+      res.json(findResult);
+    });
+    ```
+
+#### POST /api/passwords
+-   Inserts a new document into the `passwords` collection.
+
+    ```javascript
+    app.post('/', async (req, res) => {
+      const password = req.body;
+      const db = client.db(dbName);
+      const collection = db.collection('passwords');
+      const findResult = await collection.insertOne(password);
+      res.send({ success: true, result: findResult });
+    });
+    ```
+
+#### DELETE /api/passwords
+-   Deletes a document from the `passwords` collection based on its ID.
+
+    ```javascript
+    app.delete('/', async (req, res) => {
+      const password = req.body;
+      const db = client.db(dbName);
+      const collection = db.collection('passwords');
+      const findResult = await collection.deleteOne(password);
+      res.send({ success: true, result: findResult });
+    });
+    ```
+
+### Development Setup
+
+#### Prerequisites
+-   Node.js 16+ installed
+-   MongoDB installed and running
+
+#### Getting Started
+
+1.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Create `.env` file:**
+    ```env
+    MONGODB_URI=mongodb://localhost:27017
+    PORT=3000
+    ```
+
+4.  **Start the server:**
+    ```bash
+    node server.js
+    ```
+
+### Extending the API
+
+#### Adding a New Route
+
+1.  **Define the route in `server.js`:**
+    ```javascript
+    app.put('/:id', async (req, res) => {
+      const { id } = req.params;
+      const updates = req.body;
+      const db = client.db(dbName);
+      const collection = db.collection('passwords');
+      const result = await collection.updateOne({ id: id }, { $set: updates });
+      res.json({ success: true, result: result });
+    });
+    ```
+
+2.  **Test the new route with a tool like Postman or cURL.**
+
+### Error Handling
+
+The current error handling is basic. For a production environment, you should implement more robust error handling.
+
+#### Example Error Handling Middleware
+
+```javascript
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send({ error: 'Something went wrong!' });
+});
+```
+
+### Security Considerations
+
+As mentioned in the [Security Features guide](/guides/security-features), the backend currently has significant security limitations. Here are some key areas for improvement:
+
+-   **Authentication:** Implement a user authentication system (e.g., JWT, OAuth).
+-   **Authorization:** Add role-based access control.
+-   **Input Validation:** Use a library like `joi` or `express-validator` to validate request bodies.
+-   **Password Encryption:** Encrypt passwords before storing them in the database.
+-   **Rate Limiting:** Use a library like `express-rate-limit` to prevent abuse.
+-   **Helmet:** Use the `helmet` middleware to set various HTTP headers for security.
+
+### Next Steps
+
+-   [Frontend Development Guide](/development/frontend)
+-   [Contributing Guide](/development/contributing)
+-   [MongoDB Setup Guide](/deployment/mongodb-setup)

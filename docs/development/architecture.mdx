@@ -1,0 +1,98 @@
+---
+title: Project Architecture
+description: An overview of the technical architecture of the CrypticKey application.
+---
+
+## Technical Architecture
+
+This document provides an overview of the CrypticKey project's architecture, including the frontend, backend, and database components.
+
+### High-Level Overview
+
+CrypticKey follows a modern client-server architecture:
+
+- **Frontend:** A single-page application (SPA) built with React and Vite.
+- **Backend:** A Node.js and Express REST API server.
+- **Database:** A MongoDB database for data persistence.
+
+![CrypticKey Architecture Diagram](/images/architecture.png)
+
+### Frontend Architecture
+
+The frontend is responsible for the user interface and user experience.
+
+#### Key Technologies
+- **React:** For building the user interface components.
+- **Vite:** As the build tool and development server.
+- **Tailwind CSS:** For styling the application.
+- **React Router:** For client-side routing (not currently implemented).
+
+#### Component Structure
+
+The `src/components` directory contains the main React components:
+
+- **`App.jsx`:** The root component of the application.
+- **`Navbar.jsx`:** The navigation bar at the top of the page.
+- **`Manager.jsx`:** The main component that handles the password form and table.
+- **`Footer.jsx`:** The footer at the bottom of the page.
+
+#### Data Flow
+
+1.  **User Interaction:** The user interacts with the UI (e.g., filling out the form, clicking buttons).
+2.  **State Management:** React's `useState` and `useEffect` hooks manage the application's state.
+3.  **API Calls:** The `fetch` API is used to communicate with the backend API.
+4.  **UI Updates:** The UI is re-rendered based on state changes and API responses.
+
+### Backend Architecture
+
+The backend provides the API for the frontend to interact with the database.
+
+#### Key Technologies
+- **Node.js:** As the JavaScript runtime environment.
+- **Express:** As the web framework for building the REST API.
+- **MongoDB Node.js Driver:** For interacting with the MongoDB database.
+- **dotenv:** For managing environment variables.
+
+#### API Endpoints
+
+The backend exposes the following REST API endpoints:
+
+-   `GET /api/passwords`: Retrieves all passwords.
+-   `POST /api/passwords`: Saves a new password.
+-   `DELETE /api/passwords`: Deletes a password.
+
+#### Server Structure
+
+The `backend` directory contains the server-side code:
+
+-   **`server.js`:** The main entry point for the backend server.
+-   **`.env`:** The environment variables file.
+-   **`package.json`:** The backend dependencies.
+
+### Database Architecture
+
+The database stores all the password data.
+
+#### Key Technologies
+- **MongoDB:** A NoSQL, document-oriented database.
+- **Mongoose:** An Object Data Modeling (ODM) library for MongoDB and Node.js (not currently used).
+
+#### Data Schema
+
+The `passwords` collection has the following schema:
+
+```json
+{
+  "_id": "ObjectId(...) (auto-generated)",
+  "id": "string (uuid)",
+  "site": "string",
+  "username": "string",
+  "password": "string"
+}
+```
+
+### Next Steps
+
+-   [Frontend Development Guide](/development/frontend)
+-   [Backend Development Guide](/development/backend)
+-   [Contributing Guide](/development/contributing)

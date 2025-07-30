@@ -1,0 +1,97 @@
+---
+title: API Reference
+description: Complete API documentation for CrypticKey password manager endpoints.
+---
+
+## CrypticKey API
+
+The CrypticKey API provides a RESTful interface for managing passwords programmatically. All endpoints return JSON responses and use standard HTTP status codes.
+
+### Base URL
+
+For local development:
+```
+http://localhost:3000
+```
+
+For production (Vercel deployment):
+```
+https://your-app-name.vercel.app/api
+```
+
+### Authentication
+
+Currently, CrypticKey does not implement authentication. All endpoints are publicly accessible. **Important:** This is suitable for personal use or development environments only. For production use, implement proper authentication mechanisms.
+
+### Content Type
+
+All requests that send data must include the `Content-Type: application/json` header.
+
+### Response Format
+
+All API responses follow this general structure:
+
+**Success Response:**
+```json
+{
+  "success": true,
+  "data": [...],  // or single object
+  "result": {...} // MongoDB operation result (for POST/DELETE)
+}
+```
+
+**Error Response:**
+```json
+{
+  "error": "Error message",
+  "details": "Detailed error information",
+  "stack": "Error stack trace (development only)"
+}
+```
+
+### Status Codes
+
+- `200 OK` - Request successful
+- `400 Bad Request` - Invalid request data
+- `404 Not Found` - Resource not found
+- `405 Method Not Allowed` - HTTP method not supported
+- `500 Internal Server Error` - Server error
+
+### Rate Limiting
+
+Currently, there are no rate limits implemented. However, it's recommended to implement rate limiting in production environments.
+
+## Available Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET    | `/api/passwords` | Retrieve all passwords |
+| POST   | `/api/passwords` | Save a new password |
+| DELETE | `/api/passwords` | Delete a password by ID |
+
+## Testing the API
+
+You can test the API using tools like:
+- [Postman](https://www.postman.com/)
+- [Insomnia](https://insomnia.rest/)
+- cURL commands
+- JavaScript fetch API
+
+### Example cURL Request
+
+```bash
+# Get all passwords
+curl -X GET http://localhost:3000/api/passwords
+
+# Save a new password
+curl -X POST http://localhost:3000/api/passwords \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "unique-id-123",
+    "site": "https://example.com",
+    "username": "user@example.com",
+    "password": "securepassword123"
+  }'
+```
+
+Ready to explore the endpoints? Start with [Getting Passwords](/api-reference/passwords/get-passwords).

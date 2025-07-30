@@ -1,0 +1,127 @@
+---
+title: Security Features
+description: Understanding the security features and considerations of CrypticKey.
+---
+
+## Security Features and Considerations
+
+CrypticKey incorporates several security features to protect your password data. It's important to understand both what protections are in place and what limitations exist.
+
+### Current Security Features
+
+#### Password Masking
+- **Hidden Display:** Passwords are displayed as asterisks (***) in the passwords table.
+- **Toggle Visibility:** The eye icon allows you to temporarily reveal passwords when needed.
+- **Form Protection:** Password fields in the form are hidden by default.
+
+#### Secure Data Transmission
+- **HTTPS Ready:** The application supports HTTPS in production deployments.
+- **JSON API:** All data is transmitted as structured JSON over HTTP/HTTPS.
+
+#### Database Security
+- **MongoDB Storage:** Passwords are stored in a dedicated MongoDB database.
+- **Connection String Protection:** Database credentials can be secured via environment variables.
+
+### Security Limitations
+
+<Warning>
+**Important Security Notice:** CrypticKey is designed for personal use and development environments. It currently has several security limitations that make it unsuitable for production use without additional security measures.
+</Warning>
+
+#### No Authentication
+- **Open Access:** The application has no user authentication system.
+- **Public API:** All API endpoints are publicly accessible.
+- **Risk:** Anyone with access to your deployment can view and modify passwords.
+
+#### No Encryption at Rest
+- **Plain Text Storage:** Passwords are stored as plain text in the MongoDB database.
+- **Database Access:** Anyone with database access can read all passwords directly.
+
+#### No Rate Limiting
+- **Unlimited Requests:** There are no limits on API request frequency.
+- **Vulnerability:** The application could be subject to brute force or DoS attacks.
+
+### Recommended Security Enhancements
+
+If you plan to use CrypticKey in a production environment, consider implementing these security measures:
+
+#### Authentication and Authorization
+```javascript
+// Example: Add JWT authentication middleware
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  
+  if (!token) {
+    return res.sendStatus(401);
+  }
+  
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+```
+
+#### Password Encryption
+```javascript
+// Example: Encrypt passwords before storage
+const crypto = require('crypto');
+
+const encryptPassword = (password, secretKey) => {
+  const cipher = crypto.createCipher('aes192', secretKey);
+  let encrypted = cipher.update(password, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  return encrypted;
+};
+```
+
+#### Environment Security
+- **Secure Environment Variables:** Use services like Vercel's environment variables or AWS Secrets Manager.
+- **Database Security:** Enable MongoDB authentication and use secure connection strings.
+- **HTTPS Only:** Force HTTPS in production environments.
+
+### Best Practices for Secure Usage
+
+#### Deployment Security
+1. **Private Networks:** Deploy on private networks when possible.
+2. **Firewall Rules:** Restrict access to known IP addresses.
+3. **Regular Updates:** Keep all dependencies up to date.
+
+#### Data Management
+1. **Regular Backups:** Back up your password database regularly.
+2. **Strong Master Passwords:** Use strong passwords for your database and hosting accounts.
+3. **Access Control:** Limit who has access to your deployment and database.
+
+#### Personal Security
+1. **Secure Devices:** Only access CrypticKey from trusted, secure devices.
+2. **Private Networks:** Avoid using public Wi-Fi for password management.
+3. **Regular Audits:** Periodically review and update your stored passwords.
+
+### Security Roadmap
+
+Future versions of CrypticKey may include:
+
+- **User Authentication:** Login system with secure user management.
+- **End-to-End Encryption:** Client-side encryption before data transmission.
+- **Rate Limiting:** API request throttling and abuse prevention.
+- **Audit Logging:** Tracking of all password access and modifications.
+- **Two-Factor Authentication:** Additional security layer for user accounts.
+
+### Reporting Security Issues
+
+If you discover a security vulnerability in CrypticKey, please:
+
+1. **Don't Post Publicly:** Avoid posting security issues on public forums.
+2. **Contact Directly:** Email security concerns to [snoopynirav@gmail.com](mailto:snoopynirav@gmail.com).
+3. **Provide Details:** Include steps to reproduce the issue and potential impact.
+
+### Disclaimer
+
+CrypticKey is provided as-is for educational and personal use. Users are responsible for implementing appropriate security measures for their specific use cases and environments.
+
+## Next Steps
+
+- [API Reference](/api-reference/introduction)
+- [Deployment Guide](/deployment/vercel)

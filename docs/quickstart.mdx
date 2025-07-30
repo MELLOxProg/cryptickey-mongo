@@ -1,0 +1,111 @@
+---
+title: Quickstart Guide
+description: Get CrypticKey up and running in just a few minutes with this comprehensive quickstart guide.
+---
+
+## Quick Start
+
+This guide will help you get CrypticKey running on your local machine in under 5 minutes.
+
+### Prerequisites
+
+Before you begin, make sure you have the following installed:
+- [Node.js](https://nodejs.org/) (version 16 or higher)
+- [MongoDB](https://www.mongodb.com/try/download/community) (version 4.4 or higher)
+- [Git](https://git-scm.com/downloads)
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/MELLOxProg/cryptickey-mongo.git
+cd cryptickey-mongo
+```
+
+### Step 2: Install Dependencies
+
+Install the frontend dependencies:
+```bash
+npm install
+```
+
+Install the backend dependencies:
+```bash
+cd backend
+npm install
+cd ..
+```
+
+### Step 3: Start MongoDB
+
+Make sure MongoDB is running on your system. If you have MongoDB installed locally, start it with:
+
+```bash
+# On Windows
+net start MongoDB
+
+# On macOS/Linux
+sudo systemctl start mongod
+```
+
+### Step 4: Configure Environment Variables
+
+Create a `.env` file in the backend directory:
+
+```bash
+cd backend
+touch .env
+```
+
+Add the following configuration to your `.env` file:
+```env
+MONGODB_URI=mongodb://localhost:27017
+PORT=3000
+```
+
+### Step 5: Start the Application
+
+Open two terminal windows:
+
+**Terminal 1 - Start the backend server:**
+```bash
+cd backend
+node server.js
+```
+
+**Terminal 2 - Start the frontend development server:**
+```bash
+npm run dev
+```
+
+### Step 6: Access the Application
+
+Open your browser and navigate to:
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:3000`
+
+## What's Next?
+
+Now that you have CrypticKey running, you can:
+
+1. **Add your first password** - Click the save button after filling out the form
+2. **Explore the interface** - Try copying passwords to clipboard and editing entries
+3. **Check the API** - Test the endpoints using tools like Postman or curl
+4. **Deploy to production** - Follow our [deployment guide](/deployment/vercel) to deploy on Vercel
+
+## Troubleshooting
+
+### Common Issues
+
+**MongoDB Connection Error:**
+- Ensure MongoDB is running on your system
+- Check that the connection string in your `.env` file is correct
+
+**Port Already in Use:**
+- Change the port in your backend `.env` file
+- Kill any existing processes using the ports (3000 for backend, 5173 for frontend)
+
+**Dependencies Not Installing:**
+- Try clearing npm cache: `npm cache clean --force`
+- Delete `node_modules` and `package-lock.json`, then run `npm install` again
+
+Need more help? Check out our [Installation Guide](/installation) for detailed setup instructions.

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "CrypticKey Documentation",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#2e2eb8",
+    "light": "#6666df",
+    "dark": "#1a1a8b",
+    "anchors": {
+      "from": "#2e2eb8",
+      "to": "#6666df"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:snoopynirav@gmail.com"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "GitHub",
+    "url": "https://github.com/MELLOxProg/cryptickey-mongo"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    },
+    {
+      "name": "User Guide",
+      "url": "guides"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Documentation",
+      "icon": "book-open-cover",
+      "url": "https://mintlify.com/docs"
+    },
+    {
+      "name": "GitHub Repository",
+      "icon": "github",
+      "url": "https://github.com/MELLOxProg/cryptickey-mongo"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "installation"
+      ]
+    },
+    {
+      "group": "User Guide",
+      "pages": [
+        "guides/overview",
+        "guides/adding-passwords",
+        "guides/managing-passwords",
+        "guides/security-features"
+      ]
+    },
+    {
+      "group": "API Documentation",
+      "pages": [
+        "api-reference/introduction",
+        "api-reference/passwords/get-passwords",
+        "api-reference/passwords/save-password",
+        "api-reference/passwords/delete-password"
+      ]
+    },
+    {
+      "group": "Deployment",
+      "pages": [
+        "deployment/vercel",
+        "deployment/mongodb-setup",
+        "deployment/environment-variables"
+      ]
+    },
+    {
+      "group": "Development",
+      "pages": [
+        "development/architecture",
+        "development/frontend",
+        "development/backend",
+        "development/contributing"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/MELLOxProg/cryptickey-mongo"
+  }
+}

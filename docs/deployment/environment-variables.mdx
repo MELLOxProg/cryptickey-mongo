@@ -1,0 +1,242 @@
+---
+title: Environment Variables
+description: How to configure environment variables for CrypticKey deployment.
+---
+
+## Environment Variables
+
+Environment variables are crucial for configuring CrypticKey in different environments. This guide explains how to set them up for both local development and production deployment.
+
+### Required Environment Variables
+
+#### MONGODB_URI
+The connection string for your MongoDB database.
+
+**Local Development:**
+```env
+MONGODB_URI=mongodb://localhost:27017
+```
+
+**Production (MongoDB Atlas):**
+```env
+MONGODB_URI=mongodb+srv://username:password@cluster0.abc123.mongodb.net/crypticKey?retryWrites=true&w=majority
+```
+
+#### PORT
+The port number for your backend server (optional for Vercel).
+
+```env
+PORT=3000
+```
+
+### Setting Up Environment Variables
+
+#### Local Development
+
+1. **Create .env file in backend directory:**
+   ```bash
+   cd backend
+   touch .env  # On Windows: type nul > .env
+   ```
+
+2. **Add your variables:**
+   ```env
+   MONGODB_URI=mongodb://localhost:27017
+   PORT=3000
+   ```
+
+3. **Load in your application:**
+   ```javascript
+   const dotenv = require('dotenv');
+   dotenv.config();
+   
+   const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+   const port = process.env.PORT || 3000;
+   ```
+
+#### Vercel Deployment
+
+1. **Access Project Settings:**
+   - Go to your Vercel dashboard
+   - Select your project
+   - Click on "Settings" tab
+
+2. **Navigate to Environment Variables:**
+   - Click on "Environment Variables" in the left sidebar
+
+3. **Add Variables:**
+   - Click "Add New"
+   - Name: `MONGODB_URI`
+   - Value: Your MongoDB connection string
+   - Environment: Select "Production", "Preview", and "Development"
+   - Click "Save"
+
+4. **Repeat for other variables:**
+   - Add `PORT=3000` (optional)
+
+#### Other Deployment Platforms
+
+**Netlify:**
+1. Go to Site Settings → Environment variables
+2. Add key-value pairs
+3. Deploy your site
+
+**Railway:**
+1. Go to your project
+2. Click on "Variables" tab
+3. Add environment variables
+4. Deploy
+
+**Heroku:**
+```bash
+heroku config:set MONGODB_URI="your-connection-string"
+heroku config:set PORT=3000
+```
+
+### Security Best Practices
+
+#### Protecting Sensitive Data
+
+1. **Never commit .env files:**
+   ```gitignore
+   # .gitignore
+   .env
+   .env.local
+   .env.production
+   *.env
+   ```
+
+2. **Use different values for different environments:**
+   - Development: Local MongoDB
+   - Staging: Test database
+   - Production: Production database
+
+3. **Rotate credentials regularly:**
+   - Change database passwords periodically
+   - Update connection strings accordingly
+
+#### Environment-Specific Configuration
+
+**Development (.env.development):**
+```env
+MONGODB_URI=mongodb://localhost:27017
+PORT=3000
+NODE_ENV=development
+DEBUG=true
+```
+
+**Production (.env.production):**
+```env
+MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/crypticKey
+PORT=3000
+NODE_ENV=production
+DEBUG=false
+```
+
+### Validation and Error Handling
+
+#### Environment Variable Validation
+
+```javascript
+// backend/config/validateEnv.js
+function validateEnvironment() {
+  const requiredVars = ['MONGODB_URI'];
+  
+  for (const varName of requiredVars) {
+    if (!process.env[varName]) {
+      throw new Error(`Missing required environment variable: ${varName}`);
+    }
+  }
+  
+  console.log('✓ All required environment variables are set');
+}
+
+module.exports = { validateEnvironment };
+```
+
+#### Using in Your Application
+
+```javascript
+// backend/server.js
+const dotenv = require('dotenv');
+const { validateEnvironment } = require('./config/validateEnv');
+
+dotenv.config();
+validateEnvironment();
+
+const mongoUri = process.env.MONGODB_URI;
+const port = process.env.PORT || 3000;
+```
+
+### Troubleshooting
+
+#### Common Issues
+
+**"Cannot connect to database":**
+- Verify `MONGODB_URI` is correctly set
+- Check if the database service is running
+- Validate connection string format
+
+**"Environment variable not found":**
+- Ensure `.env` file is in the correct directory
+- Check file permissions
+- Verify variable names match exactly
+
+**"Connection string format error":**
+- Ensure proper URL encoding of special characters
+- Verify username and password are correct
+- Check database name in the connection string
+
+#### Debugging Environment Variables
+
+```javascript
+// Debug script to check environment variables
+console.log('Environment Variables:');
+console.log('MONGODB_URI:', process.env.MONGODB_URI ? '✓ Set' : '✗ Missing');
+console.log('PORT:', process.env.PORT || 'Using default (3000)');
+console.log('NODE_ENV:', process.env.NODE_ENV || 'Not set');
+```
+
+### Advanced Configuration
+
+#### Multiple Database Environments
+
+```env
+# Development
+DEV_MONGODB_URI=mongodb://localhost:27017/cryptickey-dev
+
+# Testing
+TEST_MONGODB_URI=mongodb://localhost:27017/cryptickey-test
+
+# Production
+PROD_MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/cryptickey-prod
+```
+
+#### Configuration Management
+
+```javascript
+// config/database.js
+const config = {
+  development: {
+    mongodb_uri: process.env.DEV_MONGODB_URI,
+    port: 3000
+  },
+  test: {
+    mongodb_uri: process.env.TEST_MONGODB_URI,
+    port: 3001
+  },
+  production: {
+    mongodb_uri: process.env.PROD_MONGODB_URI,
+    port: process.env.PORT || 3000
+  }
+};
+
+const environment = process.env.NODE_ENV || 'development';
+module.exports = config[environment];
+```
+
+### Next Steps
+
+- [MongoDB Setup Guide](/deployment/mongodb-setup)
+- [Vercel Deployment Guide](/deployment/vercel)
+- [Development Architecture](/development/architecture)

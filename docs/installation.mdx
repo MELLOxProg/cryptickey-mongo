@@ -1,0 +1,100 @@
+---
+title: Installation Guide
+description: Detailed instructions for setting up CrypticKey on your local development environment.
+---
+
+## System Requirements
+
+- **Operating System:** Windows, macOS, or Linux
+- **Node.js:** Version 16.x or higher
+- **MongoDB:** Version 4.4 or higher (Community Edition is sufficient)
+
+## Software Installation
+
+### 1. Install Node.js
+
+- Download the installer from [nodejs.org](https://nodejs.org/)
+- Verify installation with:
+  ```bash
+  node -v
+  npm -v
+  ```
+
+### 2. Install MongoDB
+
+- Follow the official installation guide for your OS: [MongoDB Installation](https://www.mongodb.com/docs/manual/installation/)
+- After installation, start the MongoDB service.
+
+### 3. Clone the Project
+
+- Get the source code from GitHub:
+  ```bash
+  git clone https://github.com/MELLOxProg/cryptickey-mongo.git
+  cd cryptickey-mongo
+  ```
+
+### 4. Install Project Dependencies
+
+- Install dependencies for the frontend (Vite/React app):
+  ```bash
+  npm install
+  ```
+- Install dependencies for the backend (Node.js/Express app):
+  ```bash
+  cd backend
+  npm install
+  cd ..
+  ```
+
+## Application Setup
+
+### 1. Configure the Backend
+
+- Create a `.env` file in the `backend` directory:
+  ```bash
+  cd backend
+  touch .env
+  ```
+- Add the following environment variables:
+  ```env
+  # MongoDB connection string
+  MONGODB_URI=mongodb://localhost:27017
+  
+  # Port for the backend server
+  PORT=3000
+  ```
+
+### 2. Configure the Frontend
+
+- The frontend is configured to proxy API requests to the backend server.
+- No additional frontend configuration is needed for local development.
+
+## Running the Application
+
+### 1. Start the Backend Server
+
+- Open a terminal in the `backend` directory and run:
+  ```bash
+  node server.js
+  ```
+- The server should start on `http://localhost:3000`.
+
+### 2. Start the Frontend Development Server
+
+- Open another terminal in the root project directory and run:
+  ```bash
+  npm run dev
+  ```
+- The frontend app will be available at `http://localhost:5173`.
+
+### 3. Verify the Setup
+
+- Open your browser to `http://localhost:5173`.
+- You should see the CrypticKey interface.
+- Try adding, editing, and deleting a password to ensure everything is working correctly.
+
+## Next Steps
+
+- Learn how to use the app in our [User Guide](/guides/overview).
+- Explore the [API Reference](/api-reference/introduction) for more details on the backend endpoints.
+- Deploy your instance to the web using our [Vercel Deployment Guide](/deployment/vercel).

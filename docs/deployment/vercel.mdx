@@ -1,0 +1,87 @@
+---
+title: Deploying with Vercel
+description: A step-by-step guide to deploying your CrypticKey application with Vercel.
+---
+
+## Deploying with Vercel
+
+Vercel is a great platform for deploying modern web applications like CrypticKey. This guide will walk you through the process.
+
+### Prerequisites
+
+- A Vercel account (you can sign up for free)
+- Your CrypticKey project pushed to a GitHub repository
+
+### Step 1: Import Your Project
+
+1.  Log in to your Vercel dashboard.
+2.  Click the "Add New..." button and select "Project".
+3.  Import your CrypticKey GitHub repository.
+
+### Step 2: Configure Your Project
+
+Vercel will automatically detect that you are using Vite and will set the build and output settings accordingly.
+
+- **Framework Preset:** Vite
+- **Build Command:** `vite build`
+- **Output Directory:** `dist`
+- **Install Command:** `npm install`
+
+### Step 3: Configure Environment Variables
+
+To connect to your MongoDB database, you need to set up environment variables in Vercel.
+
+1.  In your project settings, go to the "Environment Variables" tab.
+2.  Add the following variables:
+
+    -   `MONGODB_URI`: Your MongoDB connection string (e.g., from MongoDB Atlas).
+    -   `PORT`: The port your backend server will run on (Vercel will handle this automatically, but it's good practice to set it to 3000).
+
+### Step 4: Configure Serverless Functions
+
+To deploy your Express backend, you need to tell Vercel how to handle the API routes.
+
+Create a `vercel.json` file in the root of your project with the following content:
+
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "./backend/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "./package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/backend/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/$1"
+    }
+  ]
+}
+```
+
+### Step 5: Deploy
+
+Click the "Deploy" button. Vercel will build your project and deploy it.
+
+### Step 6: Access Your Deployed App
+
+Once the deployment is complete, Vercel will provide you with a URL where you can access your live application.
+
+### Troubleshooting
+
+-   **502 Bad Gateway Error:** This usually means your serverless function is not running correctly. Check the function logs in the Vercel dashboard.
+-   **Database Connection Issues:** Double-check your `MONGODB_URI` environment variable. Make sure your MongoDB instance allows connections from Vercel's IP addresses.
+-   **Frontend Not Loading:** Check the build logs to ensure the frontend built correctly. Make sure your `vercel.json` routes are pointing to the correct output directory.
