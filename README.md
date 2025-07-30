@@ -1,6 +1,6 @@
 # CrypticKey - Secure Password Manager
 
-![CrypticKey UI](/public/images/cryptickey-ui.png)
+![CrypticKey UI](/public/cryptickey-ui.png)
 
 **CrypticKey** is a modern, secure, and easy-to-use password manager built with the MERN stack (MongoDB, Express, React, Node.js) and deployed on Vercel.
 
