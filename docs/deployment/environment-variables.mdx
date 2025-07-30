@@ -19,7 +19,7 @@ MONGODB_URI=mongodb://localhost:27017
 
 **Production (MongoDB Atlas):**
 ```env
-MONGODB_URI=mongodb+srv://username:password@cluster0.abc123.mongodb.net/crypticKey?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@YOUR_CLUSTER.mongodb.net/YOUR_DATABASE?retryWrites=true&w=majority
 ```
 
 #### PORT
@@ -127,7 +127,7 @@ DEBUG=true
 
 **Production (.env.production):**
 ```env
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/crypticKey
+MONGODB_URI=mongodb+srv://YOUR_USER:YOUR_PASS@YOUR_CLUSTER.mongodb.net/YOUR_DATABASE
 PORT=3000
 NODE_ENV=production
 DEBUG=false
@@ -209,7 +209,7 @@ DEV_MONGODB_URI=mongodb://localhost:27017/cryptickey-dev
 TEST_MONGODB_URI=mongodb://localhost:27017/cryptickey-test
 
 # Production
-PROD_MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/cryptickey-prod
+PROD_MONGODB_URI=mongodb+srv://YOUR_USER:YOUR_PASS@YOUR_CLUSTER.mongodb.net/YOUR_DATABASE
 ```
 
 #### Configuration Management
